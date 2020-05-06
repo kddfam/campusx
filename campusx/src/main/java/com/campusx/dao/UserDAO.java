@@ -1,7 +1,11 @@
 package com.campusx.dao;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
+import com.campusx.mdl.Item;
+import com.campusx.mdl.Shop;
 import com.campusx.mdl.User;
 
 public interface UserDAO {
@@ -16,5 +20,10 @@ public interface UserDAO {
 	public Integer verifyPhoneNumberAndSendOTP(Long phoneNumber) throws Exception;
 	public Integer verifyOTP(Integer otp) throws Exception;
 	public Integer updatePassword(Integer userId, String password) throws Exception;
+	
+	public List<Shop> shopList() throws Exception;
+	public Shop specificShop(Integer shopId) throws Exception;
+	public Item specificItem(Integer itemId) throws Exception;
+	public List<Shop> searchShopList(String shopName) throws Exception;
 	
 }

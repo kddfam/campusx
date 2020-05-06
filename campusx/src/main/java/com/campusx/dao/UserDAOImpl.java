@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,9 +15,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.campusx.amg.AuthenticationManager;
+import com.campusx.ety.AddressEntity;
+import com.campusx.ety.ItemEntity;
 import com.campusx.ety.OtpEntity;
+import com.campusx.ety.ShopEntity;
 import com.campusx.ety.UserEntity;
+import com.campusx.mdl.Address;
+import com.campusx.mdl.Item;
 import com.campusx.mdl.Otp;
+import com.campusx.mdl.Shop;
 import com.campusx.mdl.User;
 
 @Repository(value="userDAO")
@@ -355,6 +362,183 @@ public class UserDAOImpl implements UserDAO {
 			return 1;
 		}
 		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Shop> shopList() throws Exception {
+		
+		// Query for getting all the shops registered with campusx
+		String strQuery = "SELECT se FROM ShopEntity se WHERE se.status=true";
+		Query query = entityManager.createQuery(strQuery);
+		
+		// storing results into a List of type ShopEntity
+		List<ShopEntity> seList = query.getResultList();
+		
+		// create new ArrayList of type Shop.
+		List<Shop> sList = new ArrayList<Shop>();
+		
+		// if not shops found, return empty list
+		if(seList.isEmpty()) {
+			return sList;
+		}
+		
+		// else, return list of shops
+		else {
+			// iterating through loop.
+			for(ShopEntity se : seList) {
+				
+				// creating object of shop.
+				Shop s = new Shop();
+				
+				// populating the shop object with data from shop entity.
+				s.setShopId(se.getShopId());
+				s.setName(se.getName());
+				s.setOfficialPhoneNumber(se.getOfficialPhoneNumber());
+				s.setOfficialEmailId(se.getOfficialEmailId());
+				s.setShopPicture(se.getShopPicture());
+				s.setNumberOfItems(se.getNumberOfItems());
+				s.setAveragePrice(se.getAveragePrice());
+				s.setShopRating(se.getShopRating());
+				s.setAddTimestamp(se.getAddTimestamp());
+				s.setLastUpdateTimestamp(se.getLastUpdateTimestamp());
+				s.setStatus(se.getStatus());
+				
+				sList.add(s);
+			}
+			return sList;	
+		}
+	}
+
+	@Override
+	public Shop specificShop(Integer shopId) throws Exception {
+		
+		// checking whether shop id exists or not.
+		ShopEntity se = entityManager.find(ShopEntity.class, shopId);
+		
+		// if not exists, return null
+		if(se == null) {
+			return null;
+		}
+		
+		// else, return object of shop class
+		else {
+			
+			// creating object of shop.
+			Shop s = new Shop();
+			
+			// populating the shop object with data from shop entity.
+			s.setShopId(se.getShopId());
+			s.setName(se.getName());
+			s.setOfficialPhoneNumber(se.getOfficialPhoneNumber());
+			s.setOfficialEmailId(se.getOfficialEmailId());
+			s.setShopPicture(se.getShopPicture());
+			s.setNumberOfItems(se.getNumberOfItems());
+			s.setAveragePrice(se.getAveragePrice());
+			s.setShopRating(se.getShopRating());
+			s.setAddTimestamp(se.getAddTimestamp());
+			s.setLastUpdateTimestamp(se.getLastUpdateTimestamp());
+			s.setStatus(se.getStatus());
+			
+			// address values from shop entity having one to one mapping with address entity.
+			AddressEntity ae = se.getAddress();
+			Address a = new Address();
+			a.setAddressId(ae.getAddressId());
+			a.setStreet(ae.getStreet());
+			a.setCity(ae.getCity());
+			a.setState(ae.getState());
+			a.setCountry(ae.getCountry());
+			a.setZipCode(ae.getZipCode());
+			a.setGeoLat(ae.getGeoLat());
+			a.setGeoLang(ae.getGeoLang());
+			s.setAddress(a);
+			
+			// items list from shop entity having one to many relationship with item entity.
+			List<ItemEntity> ieList = se.getItems();
+			List<Item> iList = new ArrayList<Item>();
+			for(ItemEntity ie : ieList) {
+				Item i = new Item();
+				i.setItemId(ie.getItemId());
+				i.setName(ie.getName());
+				i.setDescription(ie.getDescription());
+				i.setPrice(ie.getPrice());
+				i.setFoodType(ie.getFoodType());
+				i.setPicture(ie.getPicture());
+				i.setItemRating(ie.getItemRating());
+				i.setAddTimestamp(ie.getAddTimestamp());
+				i.setLastUpdateTimestamp(ie.getLastUpdateTimestamp());
+				iList.add(i);
+			}
+			s.setItems(iList);	
+			return s;
+		}
+	}
+
+	@Override
+	public Item specificItem(Integer itemId) throws Exception {
+		
+		// checking whether the item id is valid or not
+		ItemEntity ie = entityManager.find(ItemEntity.class, itemId);
+		
+		// if not found
+		if(ie == null) {
+			return null;
+		}
+		
+		// else, return item object
+		else {
+			Item i = new Item();
+			i.setItemId(ie.getItemId());
+			i.setName(ie.getName());
+			i.setDescription(ie.getDescription());
+			i.setPrice(ie.getPrice());
+			i.setFoodType(ie.getFoodType());
+			i.setPicture(ie.getPicture());
+			i.setItemRating(ie.getItemRating());
+			i.setAddTimestamp(ie.getAddTimestamp());
+			i.setLastUpdateTimestamp(ie.getLastUpdateTimestamp());
+			
+			return i;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Shop> searchShopList(String shopName) throws Exception {
+		
+		// Query for getting all the shops registered with campusx
+		String strQuery = "SELECT se FROM ShopEntity se WHERE se.status=true AND se.name=?1";
+		Query query = entityManager.createQuery(strQuery);
+		query.setParameter(1, shopName);
+		
+		// storing results into a List of type ShopEntity
+		List<ShopEntity> seList = query.getResultList();
+		
+		// create new ArrayList of type Shop.
+		List<Shop> sList = new ArrayList<Shop>();
+		
+		// iterating through loop.
+		for(ShopEntity se : seList) {
+			
+			// creating object of shop.
+			Shop s = new Shop();
+			
+			// populating the shop object with data from shop entity.
+			s.setShopId(se.getShopId());
+			s.setName(se.getName());
+			s.setOfficialPhoneNumber(se.getOfficialPhoneNumber());
+			s.setOfficialEmailId(se.getOfficialEmailId());
+			s.setShopPicture(se.getShopPicture());
+			s.setNumberOfItems(se.getNumberOfItems());
+			s.setAveragePrice(se.getAveragePrice());
+			s.setShopRating(se.getShopRating());
+			s.setAddTimestamp(se.getAddTimestamp());
+			s.setLastUpdateTimestamp(se.getLastUpdateTimestamp());
+			s.setStatus(se.getStatus());
+			
+			sList.add(s);
+		}
+		return sList;		
 	}
 	
 }

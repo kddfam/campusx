@@ -1,5 +1,7 @@
 package com.campusx.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.campusx.mdl.Item;
+import com.campusx.mdl.Shop;
 import com.campusx.mdl.User;
 import com.campusx.srv.UserService;
 
@@ -127,6 +131,51 @@ public class UserAPI {
 			String res = env.getProperty("API.ACCOUNT_CLOSE_SUCCESS");
 			userService.closeAccount(userId);
 			return new ResponseEntity<String>(res, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);
+		}
+	}
+	
+	
+	@GetMapping(value="/shops")
+	public ResponseEntity<List<Shop>> shopList() throws Exception {
+		try {
+			List<Shop> sList = userService.shopList();
+			return new ResponseEntity<List<Shop>>(sList, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);
+		}
+	}
+	
+	@GetMapping(value="/shops/{shopId}")
+	public ResponseEntity<Shop> specificShop(@PathVariable Integer shopId) throws Exception {
+		try {
+			Shop s = userService.specificShop(shopId);
+			return new ResponseEntity<Shop>(s, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);
+		}
+	}
+	
+	@GetMapping(value="/items/{itemId}")
+	public ResponseEntity<Item> specificItem(@PathVariable Integer itemId) throws Exception {
+		try {
+			Item i = userService.specificItem(itemId);
+			return new ResponseEntity<Item>(i, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);
+		}
+	}
+	
+	@GetMapping(value="/shops/search")
+	public ResponseEntity<List<Shop>> searchShopList(@RequestParam("shopName") String shopName) throws Exception {
+		try {
+			List<Shop> sList = userService.searchShopList(shopName);
+			return new ResponseEntity<List<Shop>>(sList, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);

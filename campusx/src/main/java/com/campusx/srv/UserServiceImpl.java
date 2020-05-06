@@ -1,11 +1,15 @@
 package com.campusx.srv;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.campusx.dao.UserDAO;
+import com.campusx.mdl.Item;
+import com.campusx.mdl.Shop;
 import com.campusx.mdl.User;
 import com.campusx.vdr.Validator;
 
@@ -133,6 +137,50 @@ public class UserServiceImpl implements UserService {
 		}
 		else {
 			throw new Exception("Service.INVALID_PASSWORD_FORMAT");
+		}
+	}
+
+	@Override
+	public List<Shop> shopList() throws Exception {
+		List<Shop> sList = userDAO.shopList();
+		if(sList.isEmpty()) {
+			throw new Exception("Service.NO_SHOPS_FOUND");
+		}
+		else {
+			return sList;
+		}
+	}
+
+	@Override
+	public Shop specificShop(Integer shopId) throws Exception {
+		Shop s = userDAO.specificShop(shopId);
+		if(s == null) {
+			throw new Exception("Service.NO_SHOP_FOUND");
+		}
+		else {
+			return s;
+		}
+	}
+
+	@Override
+	public Item specificItem(Integer itemId) throws Exception {
+		Item i = userDAO.specificItem(itemId);
+		if(i == null) {
+			throw new Exception("Service.NO_ITEM_FOUND");
+		}
+		else {
+			return i;
+		}
+	}
+
+	@Override
+	public List<Shop> searchShopList(String shopName) throws Exception {
+		List<Shop> sList = userDAO.searchShopList(shopName);
+		if(sList.isEmpty()) {
+			throw new Exception("Service.NO_SHOPS_FOUND");
+		}
+		else {
+			return sList;
 		}
 	}
 
