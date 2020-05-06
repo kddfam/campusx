@@ -351,7 +351,7 @@ public class UserDAOImpl implements UserDAO {
 		
 		// else, update old password with new.
 		else {
-			ue.setPassword(password);
+			ue.setPassword(AuthenticationManager.encryptPassword(password));
 			return 1;
 		}
 		
