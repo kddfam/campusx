@@ -147,12 +147,24 @@ public class VendorAPI {
 		}
 	}
 	
-	@PutMapping(value="/shops/{vendorId}")
-	public ResponseEntity<String> updateShopContactInfo(@PathVariable Integer vendorId, 
-			@RequestParam("emailId") String emailId , @RequestParam("phoneNumber") Long phoneNumber) throws Exception {
+	@PutMapping(value="/shops/pn/{vendorId}")
+	public ResponseEntity<String> updateShopContactPhoneNumber(@PathVariable Integer vendorId, @RequestParam("phoneNumber") Long phoneNumber) throws Exception {
 		try {
-			String res = env.getProperty("API.SHOP_EMAIL_OR_PHONE_UPDATE_SUCCESS");
-			vendorService.updateShopContactInfo(vendorId, emailId, phoneNumber);
+			String res = env.getProperty("API.SHOP_PHONE_UPDATE_SUCCESS");
+			vendorService.updateShopContactPhoneNumber(vendorId, phoneNumber);
+			return new ResponseEntity<String>(res, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);
+		}
+	}
+	
+	@PutMapping(value="/shops/e/{vendorId}")
+	public ResponseEntity<String> updateShopContactEmail(@PathVariable Integer vendorId, @RequestParam("emailId") String emailId) throws Exception {
+		try {
+			String res = env.getProperty("API.SHOP_EMAIL_UPDATE_SUCCESS");
+			vendorService.updateShopContactEmail(vendorId, emailId);
 			return new ResponseEntity<String>(res, HttpStatus.OK);
 		}
 		catch(Exception e) {

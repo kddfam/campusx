@@ -18,11 +18,16 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User registerUser(User user) throws Exception {
-		if(Validator.validateNumber(user.getPhoneNumber())) {
-			return userDAO.registerUser(user);
+		if(Validator.validatePassword(user.getPassword())) {
+			if(Validator.validateNumber(user.getPhoneNumber())) {
+				return userDAO.registerUser(user);
+			}
+			else {
+				throw new Exception("Service.INVALID_PHONE_NUMBER_FORMAT");
+			}
 		}
 		else {
-			throw new Exception("Service.INVALID_PHONE_NUMBER_FORMAT");
+			throw new Exception("Service.INVALID_PASSWORD_FORMAT");
 		}
 	}
 	
@@ -117,12 +122,17 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Integer updatePassword(Integer userId, String password) throws Exception {
-		Integer _statusCode = userDAO.updatePassword(userId, password);
-		if(_statusCode == -1) {
-			throw new Exception("Service.USER_DOES_NOT_EXISTS");
+		if(Validator.validatePassword(password)) {
+			Integer _statusCode = userDAO.updatePassword(userId, password);
+			if(_statusCode == -1) {
+				throw new Exception("Service.USER_DOES_NOT_EXISTS");
+			}
+			else {
+				return _statusCode;
+			}
 		}
 		else {
-			return _statusCode;
+			throw new Exception("Service.INVALID_PASSWORD_FORMAT");
 		}
 	}
 

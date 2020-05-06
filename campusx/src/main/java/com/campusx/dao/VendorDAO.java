@@ -26,7 +26,8 @@ public interface VendorDAO {
 	
 	// U
 	public Integer updateVendorPhoneNumber(Integer vendorId, Long phoneNumber) throws Exception;
-	public Integer updateShopContactInfo(Integer vendorId, String emailId, Long phoneNumber) throws Exception;
+	public Integer updateShopContactPhoneNumber(Integer vendorId, Long phoneNumber) throws Exception;
+	public Integer updateShopContactEmail(Integer vendorId, String emailId) throws Exception;
 	public Integer updateShopAddress(Integer vendorId, Address address) throws Exception;
 	public Integer updateShopPicture(Integer vendorId, MultipartFile pic) throws Exception;
 	

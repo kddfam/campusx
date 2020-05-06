@@ -171,7 +171,7 @@ public class VendorDAOImpl implements VendorDAO {
 				shopEn.setOfficialEmailId(null);
 			}
 			shopEn.setShopPicture(null);
-			shopEn.setNumberOfItems(0);
+			shopEn.setNumberOfItems(1);
 			shopEn.setAveragePrice(0.0);
 			shopEn.setShopRating(0f);
 			shopEn.setAddTimestamp(LocalDateTime.now());
@@ -483,10 +483,44 @@ public class VendorDAOImpl implements VendorDAO {
 			}
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer updateShopContactPhoneNumber(Integer vendorId, Long phoneNumber) throws Exception {
+		
+		// checking whether the request parameter value vendor id is valid or not.
+		VendorEntity ve = entityManager.find(VendorEntity.class, vendorId);
+		
+		// if vendor id does not exists, it will return -1
+		if(ve == null) {
+			return -1;
+		}
+		
+		// else, it will check whether the entered phone number already exists or not.
+		else {
+			
+			// Query for checking the information
+			Query query = entityManager.createQuery("SELECT se FROM ShopEntity se WHERE se.officialPhoneNumber=?1");
+			query.setParameter(1, phoneNumber);
+			List<ShopEntity> seList = query.getResultList();
+			
+			// if does not exists, it will update the existing phone number to the new ones.
+			if(seList.isEmpty()) {
+				ShopEntity se = ve.getShop();
+				se.setOfficialPhoneNumber(phoneNumber);
+				return 1;
+			}
+			
+			// else, it will return -2 error which symbolizes the sql duplicate error.
+			else {
+				return -2;
+			}
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Integer updateShopContactInfo(Integer vendorId, String emailId, Long phoneNumber) throws Exception {
+	public Integer updateShopContactEmail(Integer vendorId, String emailId) throws Exception {
 		
 		// checking whether the request parameter value vendor id is valid or not.
 		VendorEntity ve = entityManager.find(VendorEntity.class, vendorId);
@@ -500,16 +534,14 @@ public class VendorDAOImpl implements VendorDAO {
 		else {
 			
 			// Query for checking the information
-			Query query = entityManager.createQuery("SELECT se FROM ShopEntity se WHERE se.officialEmailId=?1 OR se.officialPhoneNumber=?2");
+			Query query = entityManager.createQuery("SELECT se FROM ShopEntity se WHERE se.officialEmailId=?1");
 			query.setParameter(1, emailId);
-			query.setParameter(2, phoneNumber);
 			List<ShopEntity> seList = query.getResultList();
 			
 			// if does not exists, it will update the existing phone number and email to the new ones.
 			if(seList.isEmpty()) {
 				ShopEntity se = ve.getShop();
 				se.setOfficialEmailId(emailId);
-				se.setOfficialPhoneNumber(phoneNumber);
 				return 1;
 			}
 			

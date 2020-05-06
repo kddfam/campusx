@@ -24,11 +24,16 @@ public class VendorServiceImpl implements VendorService {
 	
 	@Override
 	public Vendor registerVendor(Vendor vendor) throws Exception {
-		if(Validator.validateNumber(vendor.getPhoneNumber())) {
-			return vendorDAO.registerVendor(vendor);
+		if(Validator.validatePassword(vendor.getPassword())) {
+			if(Validator.validateNumber(vendor.getPhoneNumber())) {
+				return vendorDAO.registerVendor(vendor);
+			}
+			else {
+				throw new Exception("Service.INVALID_PHONE_NUMBER_FORMAT");
+			}
 		}
 		else {
-			throw new Exception("Service.INVALID_PHONE_NUMBER_FORMAT");
+			throw new Exception("Service.INVALID_PASSWORD_FORMAT");
 		}
 	}
 	
@@ -150,44 +155,40 @@ public class VendorServiceImpl implements VendorService {
 	}
 
 	@Override
-	public Integer updateShopContactInfo(Integer vendorId, String emailId, Long phoneNumber) throws Exception {
-		Integer _statusCode = vendorDAO.updateShopContactInfo(vendorId, emailId, phoneNumber);
-		if(_statusCode == -1) {
-			throw new Exception("Service.VENDOR_DOES_NOT_EXISTS");
-		}
-		else {
-			String paramEmail = emailId;
-			if(paramEmail == null) {
-				if(Validator.validateNumber(phoneNumber)) {
-					if(_statusCode == -2) {
-						throw new Exception("Service.EMAIL_OR_PHONE_ALREADY_EXISTS");
-					}
-					else {
-						return _statusCode;
-					}
-				}
-				else {
-					throw new Exception("Service.INVALID_PHONE_NUMBER_FORMAT");
-				}
+	public Integer updateShopContactPhoneNumber(Integer vendorId, Long phoneNumber) throws Exception {
+		if(Validator.validateNumber(phoneNumber)) {
+			Integer _statusCode = vendorDAO.updateShopContactPhoneNumber(vendorId, phoneNumber);
+			if(_statusCode == -1) {
+				throw new Exception("Service.VENDOR_DOES_NOT_EXISTS");
+			}
+			else if(_statusCode == -2) {
+				throw new Exception("Service.SHOP_PHONE_ALREADY_EXISTS");
 			}
 			else {
-				if(Validator.validateEmail(emailId)) {
-					if(Validator.validateNumber(phoneNumber)) {
-						if(_statusCode == -2) {
-							throw new Exception("Service.EMAIL_OR_PHONE_ALREADY_EXISTS");
-						}
-						else {
-							return _statusCode;
-						}
-					}
-					else {
-						throw new Exception("Service.INVALID_PHONE_NUMBER_FORMAT");
-					}
-				}
-				else {
-					throw new Exception("Service.INVALID_EMAIL_FORMAT");
-				}
+				return _statusCode;
 			}
+		}
+		else {
+			throw new Exception("Service.INVALID_PHONE_NUMBER_FORMAT");
+		}
+	}
+
+	@Override
+	public Integer updateShopContactEmail(Integer vendorId, String emailId) throws Exception {
+		if(Validator.validateEmail(emailId)) {
+			Integer _statusCode = vendorDAO.updateShopContactEmail(vendorId, emailId);
+			if(_statusCode == -1) {
+				throw new Exception("Service.VENDOR_DOES_NOT_EXISTS");
+			}
+			else if(_statusCode == -2) {
+				throw new Exception("Service.SHOP_EMAIL_ALREADY_EXISTS");
+			}
+			else {
+				return _statusCode;
+			}
+		}
+		else {
+			throw new Exception("Service.INVALID_EMAIL_FORMAT");
 		}
 	}
 
@@ -269,11 +270,16 @@ public class VendorServiceImpl implements VendorService {
 	@Override
 	public Integer updatePassword(Integer vendorId, String password) throws Exception {
 		Integer _statusCode = vendorDAO.updatePassword(vendorId, password);
-		if(_statusCode == -1) {
-			throw new Exception("Service.VENDOR_DOES_NOT_EXISTS");
+		if(Validator.validatePassword(password)) {
+			if(_statusCode == -1) {
+				throw new Exception("Service.VENDOR_DOES_NOT_EXISTS");
+			}
+			else {
+				return _statusCode;
+			}
 		}
 		else {
-			return _statusCode;
+			throw new Exception("Service.INVALID_PASSWORD_FORMAT");
 		}
 	}
 
