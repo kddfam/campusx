@@ -168,7 +168,6 @@ public class VendorDAOImpl implements VendorDAO {
 			}
 			shopEn.setShopPicture(null);
 			shopEn.setNumberOfItems(1);
-			shopEn.setAveragePrice(0.0);
 			shopEn.setShopRating(0f);
 			shopEn.setAddTimestamp(LocalDateTime.now());
 			shopEn.setLastUpdateTimestamp(null);
@@ -206,6 +205,7 @@ public class VendorDAOImpl implements VendorDAO {
 				ie.setItemRating(0f);
 				ie.setAddTimestamp(LocalDateTime.now());
 				ie.setLastUpdateTimestamp(null);
+				shopEn.setAveragePrice(i.getPrice());
 				
 				// adding the newly added item to the items list.
 				itemEn.add(ie);
@@ -294,6 +294,11 @@ public class VendorDAOImpl implements VendorDAO {
 			Integer oldNOI = se.getNumberOfItems();
 			Integer newNOI = oldNOI+1;
 			se.setNumberOfItems(newNOI);
+			
+			// update average price
+			Double averagePrice = se.getAveragePrice();
+			Double updatedAveragePrice = (averagePrice+item.getPrice())/se.getNumberOfItems();
+			se.setAveragePrice(updatedAveragePrice);
 			
 			return 1;
 		}
