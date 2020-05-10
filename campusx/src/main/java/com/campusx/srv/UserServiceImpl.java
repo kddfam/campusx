@@ -11,6 +11,7 @@ import com.campusx.dao.UserDAO;
 import com.campusx.mdl.User;
 import com.campusx.res.ItemResponse;
 import com.campusx.res.ShopResponse;
+import com.campusx.res.ShopResponseDetailed;
 import com.campusx.res.UserResponseR;
 import com.campusx.vdr.Validator;
 
@@ -153,8 +154,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ShopResponse specificShop(Integer shopId) throws Exception {
-		ShopResponse sr = userDAO.specificShop(shopId);
+	public ShopResponseDetailed specificShop(Integer shopId) throws Exception {
+		ShopResponseDetailed sr = userDAO.specificShop(shopId);
 		if(sr == null) {
 			throw new Exception("Service.NO_SHOP_FOUND");
 		}

@@ -1,6 +1,10 @@
 package com.campusx.res;
 
-public class ShopResponse {
+import java.util.List;
+
+import com.campusx.mdl.Address;
+
+public class ShopResponseDetailed {
 
 	private Integer shopId;
 	private String name;
@@ -8,6 +12,8 @@ public class ShopResponse {
 	private Integer numberOfItems;
 	private Double averagePrice;
 	private Float shopRating;
+	private Address address;
+	private List<ItemResponse> items;
 	
 	/**
 	 * Gets the id of the shop.
@@ -95,6 +101,23 @@ public class ShopResponse {
 	}
 	
 	/**
+	 * Gets the address for the shop
+	 * @return An object represents Address for the shop
+	 */
+	public Address getAddress() {
+		return address;
+	}
+	
+	/**
+	 * Sets the address value for the shop.
+	 * An object of address containing value of address for the shop.
+	 * @param address
+	 */
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	
+	/**
 	 * Gets the rating of the shop.
 	 * @return A Float represents rating of the shop.
 	 */
@@ -109,6 +132,23 @@ public class ShopResponse {
 	 */
 	public void setShopRating(Float shopRating) {
 		this.shopRating = shopRating;
+	}
+	
+	/**
+	 * Gets the list of all the items added by the vendor.
+	 * @return A list of items added by vendor.
+	 */
+	public List<ItemResponse> getItems() {
+		return items;
+	}
+	
+	/**
+	 * Sets the new items into the list.
+	 * An object of Item model.
+	 * @param items
+	 */
+	public void setItems(List<ItemResponse> items) {
+		this.items = items;
 	}
 	
 }

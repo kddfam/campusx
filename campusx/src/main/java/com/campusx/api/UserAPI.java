@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.campusx.mdl.User;
 import com.campusx.res.ItemResponse;
 import com.campusx.res.ShopResponse;
+import com.campusx.res.ShopResponseDetailed;
 import com.campusx.res.UserResponseR;
 import com.campusx.srv.UserService;
 
@@ -151,10 +152,10 @@ public class UserAPI {
 	}
 	
 	@GetMapping(value="/shops/{shopId}")
-	public ResponseEntity<ShopResponse> specificShop(@PathVariable Integer shopId) throws Exception {
+	public ResponseEntity<ShopResponseDetailed> specificShop(@PathVariable Integer shopId) throws Exception {
 		try {
-			ShopResponse sr = userService.specificShop(shopId);
-			return new ResponseEntity<ShopResponse>(sr, HttpStatus.OK);
+			ShopResponseDetailed sr = userService.specificShop(shopId);
+			return new ResponseEntity<ShopResponseDetailed>(sr, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);

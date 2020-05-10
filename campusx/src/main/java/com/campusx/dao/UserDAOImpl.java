@@ -25,6 +25,7 @@ import com.campusx.mdl.Otp;
 import com.campusx.mdl.User;
 import com.campusx.res.ItemResponse;
 import com.campusx.res.ShopResponse;
+import com.campusx.res.ShopResponseDetailed;
 import com.campusx.res.UserResponseR;
 
 @Repository(value="userDAO")
@@ -401,7 +402,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public ShopResponse specificShop(Integer shopId) throws Exception {
+	public ShopResponseDetailed specificShop(Integer shopId) throws Exception {
 		
 		// checking whether shop id exists or not.
 		ShopEntity se = entityManager.find(ShopEntity.class, shopId);
@@ -415,7 +416,7 @@ public class UserDAOImpl implements UserDAO {
 		else {
 			
 			// creating object of shop.
-			ShopResponse sr = new ShopResponse();
+			ShopResponseDetailed sr = new ShopResponseDetailed();
 			
 			// populating the shop object with data from shop entity.
 			sr.setShopId(se.getShopId());
@@ -488,9 +489,9 @@ public class UserDAOImpl implements UserDAO {
 	public List<ShopResponse> searchShopList(String shopName) throws Exception {
 
 		// Query for getting all the shops registered with campusx
-		String strQuery = "SELECT se FROM ShopEntity se WHERE se.status=true AND se.name=?1";
+		String strQuery = "SELECT se FROM ShopEntity se WHERE se.status=true AND se.name=:shopName";
 		Query query = entityManager.createQuery(strQuery);
-		query.setParameter(1, shopName);
+		query.setParameter("shopName", shopName);
 
 		// storing results into a List of type ShopEntity
 		List<ShopEntity> seList = query.getResultList();

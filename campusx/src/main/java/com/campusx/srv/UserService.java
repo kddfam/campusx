@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.campusx.mdl.User;
 import com.campusx.res.ItemResponse;
 import com.campusx.res.ShopResponse;
+import com.campusx.res.ShopResponseDetailed;
 import com.campusx.res.UserResponseR;
 
 public interface UserService {
@@ -23,7 +24,7 @@ public interface UserService {
 	public Integer updatePassword(Integer userId, String password) throws Exception;
 	
 	public List<ShopResponse> shopList() throws Exception;
-	public ShopResponse specificShop(Integer shopId) throws Exception;
+	public ShopResponseDetailed specificShop(Integer shopId) throws Exception;
 	public ItemResponse specificItem(Integer itemId) throws Exception;
 	public List<ShopResponse> searchShopList(String shopName) throws Exception;
 	
