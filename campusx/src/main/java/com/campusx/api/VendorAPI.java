@@ -20,6 +20,7 @@ import com.campusx.mdl.Item;
 import com.campusx.mdl.Kyc;
 import com.campusx.mdl.Shop;
 import com.campusx.mdl.Vendor;
+import com.campusx.res.VendorResponseR;
 import com.campusx.srv.VendorService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,10 +37,10 @@ public class VendorAPI {
 	Environment env;
 	
 	@PostMapping(value="/vendors")
-	public ResponseEntity<Vendor> registerVendor(@RequestBody Vendor vendor) throws Exception {
+	public ResponseEntity<VendorResponseR> registerVendor(@RequestBody Vendor vendor) throws Exception {
 		try {
-			Vendor v = vendorService.registerVendor(vendor);
-			return new ResponseEntity<Vendor>(v, HttpStatus.CREATED);
+			VendorResponseR vr = vendorService.registerVendor(vendor);
+			return new ResponseEntity<VendorResponseR>(vr, HttpStatus.CREATED);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

@@ -9,11 +9,12 @@ import com.campusx.mdl.Item;
 import com.campusx.mdl.Kyc;
 import com.campusx.mdl.Shop;
 import com.campusx.mdl.Vendor;
+import com.campusx.res.VendorResponseR;
 
 public interface VendorService {
 
 	// C
-	public Vendor registerVendor(Vendor vendor) throws Exception;
+	public VendorResponseR registerVendor(Vendor vendor) throws Exception;
 	public Vendor loginVendor(Long phoneNumber, String password) throws Exception;
 	public Integer addShop(Integer vendorId, Shop shop) throws Exception;
 	public Integer completeKYC(Integer vendorId, Kyc kyc) throws Exception;

@@ -8,9 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.campusx.dao.UserDAO;
-import com.campusx.mdl.Item;
-import com.campusx.mdl.Shop;
 import com.campusx.mdl.User;
+import com.campusx.res.ItemResponse;
+import com.campusx.res.ShopResponse;
+import com.campusx.res.UserResponseR;
 import com.campusx.vdr.Validator;
 
 @Service(value="userService")
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
 	private UserDAO userDAO;
 	
 	@Override
-	public User registerUser(User user) throws Exception {
+	public UserResponseR registerUser(User user) throws Exception {
 		if(Validator.validatePassword(user.getPassword())) {
 			if(Validator.validateNumber(user.getPhoneNumber())) {
 				return userDAO.registerUser(user);
@@ -141,46 +142,46 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Shop> shopList() throws Exception {
-		List<Shop> sList = userDAO.shopList();
-		if(sList.isEmpty()) {
+	public List<ShopResponse> shopList() throws Exception {
+		List<ShopResponse> srList = userDAO.shopList();
+		if(srList.isEmpty()) {
 			throw new Exception("Service.NO_SHOPS_FOUND");
 		}
 		else {
-			return sList;
+			return srList;
 		}
 	}
 
 	@Override
-	public Shop specificShop(Integer shopId) throws Exception {
-		Shop s = userDAO.specificShop(shopId);
-		if(s == null) {
+	public ShopResponse specificShop(Integer shopId) throws Exception {
+		ShopResponse sr = userDAO.specificShop(shopId);
+		if(sr == null) {
 			throw new Exception("Service.NO_SHOP_FOUND");
 		}
 		else {
-			return s;
+			return sr;
 		}
 	}
 
 	@Override
-	public Item specificItem(Integer itemId) throws Exception {
-		Item i = userDAO.specificItem(itemId);
-		if(i == null) {
+	public ItemResponse specificItem(Integer itemId) throws Exception {
+		ItemResponse ir = userDAO.specificItem(itemId);
+		if(ir == null) {
 			throw new Exception("Service.NO_ITEM_FOUND");
 		}
 		else {
-			return i;
+			return ir;
 		}
 	}
 
 	@Override
-	public List<Shop> searchShopList(String shopName) throws Exception {
-		List<Shop> sList = userDAO.searchShopList(shopName);
-		if(sList.isEmpty()) {
+	public List<ShopResponse> searchShopList(String shopName) throws Exception {
+		List<ShopResponse> srList = userDAO.searchShopList(shopName);
+		if(srList.isEmpty()) {
 			throw new Exception("Service.NO_SHOPS_FOUND");
 		}
 		else {
-			return sList;
+			return srList;
 		}
 	}
 

@@ -27,6 +27,7 @@ import com.campusx.mdl.Kyc;
 import com.campusx.mdl.Otp;
 import com.campusx.mdl.Shop;
 import com.campusx.mdl.Vendor;
+import com.campusx.res.VendorResponseR;
 
 /**
  * 
@@ -43,7 +44,7 @@ public class VendorDAOImpl implements VendorDAO {
 	private EntityManager entityManager;
 
 	@Override
-	public Vendor registerVendor(Vendor vendor) throws Exception {
+	public VendorResponseR registerVendor(Vendor vendor) throws Exception {
 		
 		// create vendor entity object
 		VendorEntity vendorEn = new VendorEntity();
@@ -64,23 +65,18 @@ public class VendorDAOImpl implements VendorDAO {
 		entityManager.persist(vendorEn);
 		
 		// creating object of vendor.
-		Vendor v = new Vendor();
+		VendorResponseR vr = new VendorResponseR();
 		
 		// populating vendor object with data from vendor entity.
-		v.setVendorId(vendorEn.getVendorId());
-		v.setFirstName(vendorEn.getFirstName());
-		v.setLastName(vendorEn.getLastName());
-		v.setPhoneNumber(vendorEn.getPhoneNumber());
-		v.setSecretPin(vendorEn.getSecretPin());
-		v.setPassword(vendorEn.getPassword());
-		v.setAddTimestamp(vendorEn.getAddTimestamp());
-		v.setSecretPinLastUpdateTimestamp(vendorEn.getSecretPinLastUpdateTimestamp());
-		v.setPasswordLastUpdateTimestamp(vendorEn.getPasswordLastUpdateTimestamp());
-		v.setAccountStatus(vendorEn.getAccountStatus());
-		v.setIsAccountClosed(vendorEn.getIsAccountClosed());
+		vr.setVendorId(vendorEn.getVendorId());
+		vr.setFirstName(vendorEn.getFirstName());
+		vr.setLastName(vendorEn.getLastName());
+		vr.setPhoneNumber(vendorEn.getPhoneNumber());
+		vr.setSecretPin(vendorEn.getSecretPin());
+		vr.setPassword(vendorEn.getPassword());
 		
 		// returning the vendor information.
-		return v;
+		return vr;
 		
 	}
 	

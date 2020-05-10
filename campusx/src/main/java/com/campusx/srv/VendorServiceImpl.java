@@ -13,6 +13,7 @@ import com.campusx.mdl.Item;
 import com.campusx.mdl.Kyc;
 import com.campusx.mdl.Shop;
 import com.campusx.mdl.Vendor;
+import com.campusx.res.VendorResponseR;
 import com.campusx.vdr.Validator;
 
 @Service(value="vendorService")
@@ -23,7 +24,7 @@ public class VendorServiceImpl implements VendorService {
 	private VendorDAO vendorDAO;
 	
 	@Override
-	public Vendor registerVendor(Vendor vendor) throws Exception {
+	public VendorResponseR registerVendor(Vendor vendor) throws Exception {
 		if(Validator.validatePassword(vendor.getPassword())) {
 			if(Validator.validateNumber(vendor.getPhoneNumber())) {
 				return vendorDAO.registerVendor(vendor);

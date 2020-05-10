@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.campusx.mdl.Item;
-import com.campusx.mdl.Shop;
 import com.campusx.mdl.User;
+import com.campusx.res.ItemResponse;
+import com.campusx.res.ShopResponse;
+import com.campusx.res.UserResponseR;
 import com.campusx.srv.UserService;
 
 @RestController
@@ -34,10 +35,10 @@ public class UserAPI {
 	Environment env;
 	
 	@PostMapping(value="/users")
-	public ResponseEntity<User> registerUser(@RequestBody User user) throws Exception {
+	public ResponseEntity<UserResponseR> registerUser(@RequestBody User user) throws Exception {
 		try {
-			User u = userService.registerUser(user);
-			return new ResponseEntity<User>(u, HttpStatus.CREATED);
+			UserResponseR ur = userService.registerUser(user);
+			return new ResponseEntity<UserResponseR>(ur, HttpStatus.CREATED);
 		}
 		catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, env.getProperty(e.getMessage()), e);
@@ -139,10 +140,10 @@ public class UserAPI {
 	
 	
 	@GetMapping(value="/shops")
-	public ResponseEntity<List<Shop>> shopList() throws Exception {
+	public ResponseEntity<List<ShopResponse>> shopList() throws Exception {
 		try {
-			List<Shop> sList = userService.shopList();
-			return new ResponseEntity<List<Shop>>(sList, HttpStatus.OK);
+			List<ShopResponse> srList = userService.shopList();
+			return new ResponseEntity<List<ShopResponse>>(srList, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);
@@ -150,10 +151,10 @@ public class UserAPI {
 	}
 	
 	@GetMapping(value="/shops/{shopId}")
-	public ResponseEntity<Shop> specificShop(@PathVariable Integer shopId) throws Exception {
+	public ResponseEntity<ShopResponse> specificShop(@PathVariable Integer shopId) throws Exception {
 		try {
-			Shop s = userService.specificShop(shopId);
-			return new ResponseEntity<Shop>(s, HttpStatus.OK);
+			ShopResponse sr = userService.specificShop(shopId);
+			return new ResponseEntity<ShopResponse>(sr, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);
@@ -161,10 +162,10 @@ public class UserAPI {
 	}
 	
 	@GetMapping(value="/items/{itemId}")
-	public ResponseEntity<Item> specificItem(@PathVariable Integer itemId) throws Exception {
+	public ResponseEntity<ItemResponse> specificItem(@PathVariable Integer itemId) throws Exception {
 		try {
-			Item i = userService.specificItem(itemId);
-			return new ResponseEntity<Item>(i, HttpStatus.OK);
+			ItemResponse ir = userService.specificItem(itemId);
+			return new ResponseEntity<ItemResponse>(ir, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);
@@ -172,10 +173,10 @@ public class UserAPI {
 	}
 	
 	@GetMapping(value="/shops/search")
-	public ResponseEntity<List<Shop>> searchShopList(@RequestParam("shopName") String shopName) throws Exception {
+	public ResponseEntity<List<ShopResponse>> searchShopList(@RequestParam("shopName") String shopName) throws Exception {
 		try {
-			List<Shop> sList = userService.searchShopList(shopName);
-			return new ResponseEntity<List<Shop>>(sList, HttpStatus.OK);
+			List<ShopResponse> srList = userService.searchShopList(shopName);
+			return new ResponseEntity<List<ShopResponse>>(srList, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty(e.getMessage()), e);

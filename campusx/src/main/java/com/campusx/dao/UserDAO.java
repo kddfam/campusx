@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.campusx.mdl.Item;
-import com.campusx.mdl.Shop;
 import com.campusx.mdl.User;
+import com.campusx.res.ItemResponse;
+import com.campusx.res.ShopResponse;
+import com.campusx.res.UserResponseR;
 
 public interface UserDAO {
 
-	public User registerUser(User user) throws Exception;
+	public UserResponseR registerUser(User user) throws Exception;
 	public User loginUser(Long phoneNumber, String password) throws Exception;
 	public User getProfile(Integer userId) throws Exception;
 	public Integer updatePhoneNumber(Integer userId, Long phoneNumber) throws Exception;
@@ -21,9 +22,9 @@ public interface UserDAO {
 	public Integer verifyOTP(Integer otp) throws Exception;
 	public Integer updatePassword(Integer userId, String password) throws Exception;
 	
-	public List<Shop> shopList() throws Exception;
-	public Shop specificShop(Integer shopId) throws Exception;
-	public Item specificItem(Integer itemId) throws Exception;
-	public List<Shop> searchShopList(String shopName) throws Exception;
+	public List<ShopResponse> shopList() throws Exception;
+	public ShopResponse specificShop(Integer shopId) throws Exception;
+	public ItemResponse specificItem(Integer itemId) throws Exception;
+	public List<ShopResponse> searchShopList(String shopName) throws Exception;
 	
 }
