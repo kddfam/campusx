@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.campusx.mdl.LoginRequest;
 import com.campusx.mdl.Item;
 import com.campusx.mdl.Shop;
 import com.campusx.mdl.User;
+import com.campusx.res.UserAuthResponse;
+import com.campusx.sec.JwtUtil;
 import com.campusx.srv.UserService;
 
 @RestController
@@ -31,7 +37,14 @@ public class UserAPI {
 	private UserService userService;
 	
 	@Autowired
+	private AuthenticationManager authManager;
+	
+	@Autowired
 	Environment env;
+	
+	@Autowired
+	private JwtUtil jwtUtil;
+	
 	
 	@PostMapping(value="/users")
 	public ResponseEntity<User> registerUser(@RequestBody User user) throws Exception {
@@ -44,16 +57,20 @@ public class UserAPI {
 		}
 	}
 	
-	@PostMapping(value="/users/login")
-	public ResponseEntity<User> loginUser(@RequestParam("phoneNumber") Long phoneNumber, @RequestParam("password") String password) throws Exception {
+	@PostMapping(value="/user/login")
+	public ResponseEntity<?> authenticateRequest(@RequestBody LoginRequest authRequest) throws Exception {
 		try {
-			User u = userService.loginUser(phoneNumber, password);
-			return new ResponseEntity<User>(u, HttpStatus.OK);
+			authManager.authenticate(
+					new UsernamePasswordAuthenticationToken(authRequest.getPhoneNumber(), authRequest.getPassword()));
 		}
 		catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, env.getProperty(e.getMessage()), e);
+			throw new Exception("Login Error");
 		}
+		final UserDetails userDetails = userService.loadUserByUsername(authRequest.getPhoneNumber().toString());
+		final String jwt = jwtUtil.generateToken(userDetails);
+		return ResponseEntity.ok(new UserAuthResponse(jwt));
 	}
+	
 	
 	@GetMapping(value="/users/{userId}")
 	public ResponseEntity<User> getProfile(@PathVariable Integer userId) throws Exception {

@@ -26,4 +26,6 @@ public interface UserDAO {
 	public Item specificItem(Integer itemId) throws Exception;
 	public List<Shop> searchShopList(String shopName) throws Exception;
 	
+	public User loadUserByUsername(String phoneNumber) throws Exception;
+	
 }

@@ -3,6 +3,9 @@ package com.campusx.srv;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,11 +14,12 @@ import com.campusx.dao.UserDAO;
 import com.campusx.mdl.Item;
 import com.campusx.mdl.Shop;
 import com.campusx.mdl.User;
+import com.campusx.sec.UserInformation;
 import com.campusx.vdr.Validator;
 
 @Service(value="userService")
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Autowired
 	private UserDAO userDAO;
@@ -182,6 +186,20 @@ public class UserServiceImpl implements UserService {
 		else {
 			return sList;
 		}
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
+		User u;
+		UserInformation userInfo;
+		try {
+			u = userDAO.loadUserByUsername(phoneNumber);
+			userInfo = new UserInformation(u);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new UsernameNotFoundException("Error 404");
+		}
+		return userInfo;
 	}
 
 }

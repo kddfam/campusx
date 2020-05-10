@@ -87,7 +87,7 @@ CREATE TABLE users(
 	user_id BIGINT PRIMARY KEY,
 	first_name VARCHAR NOT NULL,
 	last_name VARCHAR NOT NULL,
-	date_of_birth DATE NOT NULL,
+	date_of_birth DATE NULL,
 	phone_number BIGINT UNIQUE NOT NULL,
 	password VARCHAR NOT NULL,
 	profile_picture VARCHAR,
@@ -106,3 +106,5 @@ CREATE TABLE otp(
 	generated_for BIGINT NOT NULL,
 	status BOOLEAN DEFAULT FALSE
 );
+
+SELECT * FROM users;

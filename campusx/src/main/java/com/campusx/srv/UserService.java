@@ -2,6 +2,8 @@ package com.campusx.srv;
 
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.campusx.mdl.Item;
@@ -25,5 +27,7 @@ public interface UserService {
 	public Shop specificShop(Integer shopId) throws Exception;
 	public Item specificItem(Integer itemId) throws Exception;
 	public List<Shop> searchShopList(String shopName) throws Exception;
+	
+	public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException;
 	
 }

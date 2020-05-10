@@ -41,7 +41,7 @@ public class UserDAOImpl implements UserDAO {
 		// populating the user entity object with data.
 		userEn.setFirstName(user.getFirstName());
 		userEn.setLastName(user.getLastName());
-		userEn.setDateOfBirth(user.getDateOfBirth());
+		userEn.setDateOfBirth(null);
 		userEn.setPhoneNumber(user.getPhoneNumber());
 		userEn.setPassword(AuthenticationManager.encryptPassword(user.getPassword()));
 		userEn.setProfilePicture(null);
@@ -60,14 +60,8 @@ public class UserDAOImpl implements UserDAO {
 		u.setUserId(userEn.getUserId());
 		u.setFirstName(userEn.getFirstName());
 		u.setLastName(userEn.getLastName());
-		u.setDateOfBirth(userEn.getDateOfBirth());
 		u.setPhoneNumber(userEn.getPhoneNumber());
 		u.setPassword(userEn.getPassword());
-		u.setProfilePicture(userEn.getProfilePicture());
-		u.setAddTimestamp(userEn.getAddTimestamp());
-		u.setLastUpdateTimestamp(userEn.getLastUpdateTimestamp());
-		u.setAccountStatus(userEn.getAccountStatus());
-		u.setIsAccountClosed(userEn.getIsAccountClosed());
 		
 		// returning the user object.
 		return u;
@@ -430,15 +424,9 @@ public class UserDAOImpl implements UserDAO {
 			// populating the shop object with data from shop entity.
 			s.setShopId(se.getShopId());
 			s.setName(se.getName());
-			s.setOfficialPhoneNumber(se.getOfficialPhoneNumber());
-			s.setOfficialEmailId(se.getOfficialEmailId());
-			s.setShopPicture(se.getShopPicture());
 			s.setNumberOfItems(se.getNumberOfItems());
 			s.setAveragePrice(se.getAveragePrice());
 			s.setShopRating(se.getShopRating());
-			s.setAddTimestamp(se.getAddTimestamp());
-			s.setLastUpdateTimestamp(se.getLastUpdateTimestamp());
-			s.setStatus(se.getStatus());
 			
 			// address values from shop entity having one to one mapping with address entity.
 			AddressEntity ae = se.getAddress();
@@ -465,8 +453,6 @@ public class UserDAOImpl implements UserDAO {
 				i.setFoodType(ie.getFoodType());
 				i.setPicture(ie.getPicture());
 				i.setItemRating(ie.getItemRating());
-				i.setAddTimestamp(ie.getAddTimestamp());
-				i.setLastUpdateTimestamp(ie.getLastUpdateTimestamp());
 				iList.add(i);
 			}
 			s.setItems(iList);	
@@ -539,6 +525,44 @@ public class UserDAOImpl implements UserDAO {
 			sList.add(s);
 		}
 		return sList;		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public User loadUserByUsername(String phoneNumber) throws Exception {
+		
+		// query for checking whether the phone number exists or not
+		String strQuery = "SELECT ue FROM UserEntity ue WHERE ue.phoneNumber=?1";
+		
+		// converting the string phone number to the long phone number
+		Long pn = Long.parseLong(phoneNumber);
+		Query query = entityManager.createQuery(strQuery);
+		query.setParameter(1, pn);
+		List<UserEntity> ueList = query.getResultList(); 	
+		User u = new User();
+		
+		// if user entit list is empty, return null
+		if(ueList.isEmpty()) {
+			return null;
+		}
+		
+		// else, return object of user 
+		else {
+			for(UserEntity ue : ueList) {
+				u.setFirstName(ue.getFirstName());
+				u.setLastName(ue.getLastName());
+				u.setDateOfBirth(ue.getDateOfBirth());
+				u.setPhoneNumber(ue.getPhoneNumber());
+				u.setPassword(ue.getPassword());
+				u.setProfilePicture(ue.getProfilePicture());
+				u.setAddTimestamp(ue.getAddTimestamp());
+				u.setLastUpdateTimestamp(ue.getLastUpdateTimestamp());
+				u.setAccountStatus(ue.getAccountStatus());
+				u.setIsAccountClosed(ue.getIsAccountClosed());
+			}
+			
+			return u;
+		}
 	}
 	
 }
