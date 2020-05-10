@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.campusx.mdl.AuthRequest;
 import com.campusx.mdl.User;
 import com.campusx.res.ItemResponse;
 import com.campusx.res.ShopResponse;
 import com.campusx.res.ShopResponseDetailed;
 import com.campusx.res.UserResponseR;
+import com.campusx.srv.CustomUserDetailsService;
 import com.campusx.srv.UserService;
 
 @RestController
@@ -35,6 +40,12 @@ public class UserAPI {
 	@Autowired
 	Environment env;
 	
+	@Autowired
+	private AuthenticationManager authManager;
+	
+//	@Autowired
+//	private CustomUserDetailsService customUserDetailsService;
+	
 	@PostMapping(value="/users")
 	public ResponseEntity<UserResponseR> registerUser(@RequestBody User user) throws Exception {
 		try {
@@ -45,12 +56,15 @@ public class UserAPI {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, env.getProperty(e.getMessage()), e);
 		}
 	}
-	
+
 	@PostMapping(value="/users/login")
-	public ResponseEntity<User> loginUser(@RequestParam("phoneNumber") Long phoneNumber, @RequestParam("password") String password) throws Exception {
+	public ResponseEntity<User> loginUser(@RequestBody AuthRequest authRequest) throws Exception {
 		try {
-			User u = userService.loginUser(phoneNumber, password);
-			return new ResponseEntity<User>(u, HttpStatus.OK);
+			authManager.authenticate(
+					new UsernamePasswordAuthenticationToken(authRequest.getPhoneNumber(), authRequest.getPassword()));
+//			final UserDetails userDetails = customUserDetailsService.loadUserByUsername(authRequest.getPhoneNumber().toString());
+			final User user = userService.loginUser(authRequest.getPhoneNumber(), authRequest.getPassword());
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, env.getProperty(e.getMessage()), e);

@@ -28,4 +28,6 @@ public interface UserDAO {
 	public ItemResponse specificItem(Integer itemId) throws Exception;
 	public List<ShopResponse> searchShopList(String shopName) throws Exception;
 	
+	public User loadUserByPhoneNumber(Long phoneNumber) throws Exception;
+	
 }

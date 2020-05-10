@@ -526,4 +526,37 @@ public class UserDAOImpl implements UserDAO {
 		return srList;		
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public User loadUserByPhoneNumber(Long phoneNumber) throws Exception {
+
+		String strQuery = "SELECT ue FROM UserEntity ue WHERE ue.phoneNumber=?1";
+		Query query = entityManager.createQuery(strQuery);
+		query.setParameter(1, phoneNumber);
+		List<UserEntity> ueList = query.getResultList();
+		// if list is empty, return -1;
+		if(ueList.isEmpty()) {
+			return null;
+		}
+		// else, decrypt password and check account status
+		else {
+			// creating object of user class.
+			User u = new User();
+			for(UserEntity ue : ueList) {
+				u.setUserId(ue.getUserId());
+				u.setFirstName(ue.getFirstName());
+				u.setLastName(ue.getLastName());
+				u.setDateOfBirth(ue.getDateOfBirth());
+				u.setPhoneNumber(ue.getPhoneNumber());
+				u.setPassword(ue.getPassword());
+				u.setProfilePicture(ue.getProfilePicture());
+				u.setAddTimestamp(ue.getAddTimestamp());
+				u.setLastUpdateTimestamp(ue.getLastUpdateTimestamp());
+				u.setAccountStatus(ue.getAccountStatus());
+				u.setIsAccountClosed(ue.getIsAccountClosed());
+			}
+			return u;
+		}
+	}
+	
 }

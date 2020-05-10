@@ -106,3 +106,5 @@ CREATE TABLE otp(
 	generated_for BIGINT NOT NULL,
 	status BOOLEAN DEFAULT FALSE
 );
+
+SELECT * FROM users;
