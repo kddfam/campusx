@@ -5,8 +5,6 @@ public class ShopResponse {
 	private Integer shopId;
 	private String name;
 	private String shopPicture;
-	private Integer numberOfItems;
-	private Double averagePrice;
 	private Float shopRating;
 	
 	/**
@@ -58,40 +56,6 @@ public class ShopResponse {
 	 */
 	public void setShopPicture(String shopPicture) {
 		this.shopPicture = shopPicture;
-	}
-	
-	/**
-	 * Gets the number of items of the shop.
-	 * @return An Integer represents number of items of shop.
-	 */
-	public Integer getNumberOfItems() {
-		return numberOfItems;
-	}
-	
-	/**
-	 * Sets the number of items of the shop.
-	 * An Integer containing number of items of the shop.
-	 * @param numberOfItems
-	 */
-	public void setNumberOfItems(Integer numberOfItems) {
-		this.numberOfItems = numberOfItems;
-	}
-	
-	/**
-	 * Gets the average price of items of the shop.
-	 * @return A Double represents average price of items of the shop.
-	 */
-	public Double getAveragePrice() {
-		return averagePrice;
-	}
-	
-	/**
-	 * Sets the average price of items of the shop.
-	 * A Long containing average price of items of the shop.
-	 * @param averagePrice
-	 */
-	public void setAveragePrice(Double averagePrice) {
-		this.averagePrice = averagePrice;
 	}
 	
 	/**

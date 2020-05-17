@@ -213,7 +213,7 @@ public class UserDAOImpl implements UserDAO {
 		else {
 			
 			// folder where file will be stored
-			String folder = "photos/users/";
+			String folder = "photos/users";
 			
 			// getting bytes of picture
 			byte[] bytes = pic.getBytes();
@@ -391,8 +391,6 @@ public class UserDAOImpl implements UserDAO {
 				sr.setShopId(se.getShopId());
 				sr.setName(se.getName());
 				sr.setShopPicture(se.getShopPicture());
-				sr.setNumberOfItems(se.getNumberOfItems());
-				sr.setAveragePrice(se.getAveragePrice());
 				sr.setShopRating(se.getShopRating());
 				
 				srList.add(sr);
@@ -516,8 +514,6 @@ public class UserDAOImpl implements UserDAO {
 				sr.setShopId(se.getShopId());
 				sr.setName(se.getName());
 				sr.setShopPicture(se.getShopPicture());
-				sr.setNumberOfItems(se.getNumberOfItems());
-				sr.setAveragePrice(se.getAveragePrice());
 				sr.setShopRating(se.getShopRating());
 
 				srList.add(sr);
